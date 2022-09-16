@@ -1,0 +1,9 @@
+# react
+node_modules
+package-lock.json
+.env.secrets
+
+# flask
+venv
+
+.DS_STORE
