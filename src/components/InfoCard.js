@@ -12,6 +12,10 @@ const InfoCard = ({ speciesCode, speciesName, birdData }) => {
     }
   }, [speciesCode, selectedBirdData]);
 
+  const convertToPercent = (val) => {
+    return (val * 100).toFixed(2);
+  };
+
   if (selectedBirdData) {
     return (
       <Card
@@ -27,7 +31,7 @@ const InfoCard = ({ speciesCode, speciesName, birdData }) => {
       >
         <Card.Img
           variant="top"
-          style={{ maxHeight: 300 }}
+          style={{ maxHeight: 300, textAlign: "center" }}
           src={selectedBirdData["image_url"]}
         />
         <Card.Body>
@@ -37,11 +41,18 @@ const InfoCard = ({ speciesCode, speciesName, birdData }) => {
           <Card.Text style={{ fontSize: "0.8em" }}>
             Conservation Status: {selectedBirdData["cons_status"]}
             <br />
+            Native Stataus: {selectedBirdData["native"]}
+            <br />
             Quantity: {selectedBirdData["count_2020"]} (2020){" "}
             {selectedBirdData["count_2021"]} (2020)
             <br />
-            Change: {selectedBirdData["perc_diff"]}{" "}
-            {parseInt(selectedBirdData["perc_diff"]) > 0 ? "▲" : "▼"}
+            Change: {convertToPercent(selectedBirdData["perc_diff"])}
+            {"% "}
+            {selectedBirdData["perc_diff"] > 0 ? (
+              <span style={{ color: "green" }}>▲</span>
+            ) : (
+              <span style={{ color: "red" }}>▼</span>
+            )}
           </Card.Text>
         </Card.Body>
       </Card>

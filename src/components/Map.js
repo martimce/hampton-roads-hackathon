@@ -16,6 +16,7 @@ function Map() {
   const [allConservation, setAllConservation] = useState([]);
   const [selectedSpecies, setSelectedSpecies] = useState();
   const [conservationStatus, setConservationStatus] = useState();
+  const [nativeStatus, setNativeStatus] = useState();
   const [selectedCommonName, setSelectedCommonName] = useState();
   const [birdData, setBirdData] = useState();
   const dispatch = useDispatch();
@@ -72,7 +73,9 @@ function Map() {
   };
 
   const selectNative = (e) => {
-    const native = e.target.value === "native";
+    const nativeStatus = e.target.value;
+    setNativeStatus(nativeStatus);
+    filterData("native", nativeStatus);
   };
 
   const getSpeciesList = (data) => {
@@ -232,74 +235,120 @@ function Map() {
   }, [dispatch, filtered, activeData, filteredData]);
 
   return (
-    <div style={{ position: "relative" }}>
-      <NavBar
-        selectedSpecies={selectedCommonName}
-        conservationStatus={conservationStatus}
-      />
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <KeplerGl
-          id="map"
-          width={window.innerWidth}
-          mapboxApiAccessToken={process.env.MAPBOX_KEY}
-          height={window.innerHeight - 200}
+    <>
+      <div style={{ position: "relative" }}>
+        <NavBar
+          selectedSpecies={selectedCommonName}
+          conservationStatus={conservationStatus}
+          nativeStatus={nativeStatus}
         />
-        <div style={{ margin: "2em" }}>
-          <p>Native Status</p>
-          <select onChange={selectNative}>
-            <option value="none" selected={!filtered ? true : false} disabled>
-              Select an Option
-            </option>
-            <option key="native" value="data">
-              Native
-            </option>
-            <option key="nonnative" value="data">
-              Non-Native
-            </option>
-          </select>
-          <p>Conservation Status</p>
-          <select onChange={selectConservation}>
-            <option value="none" selected={!filtered ? true : false} disabled>
-              Select an Option
-            </option>
-            {allConservation.map((cons) => (
-              <option
-                key={cons}
-                value={cons}
-                selected={conservationStatus === cons ? true : false}
-              >
-                {cons}
-              </option>
-            ))}
-          </select>
-          <p>Common Name</p>
-          <select onChange={selectSpecies}>
-            <option value="none" selected={!filtered ? true : false}>
-              Select an Option
-            </option>
-            {allSpecies.map((spec) => (
-              <option
-                key={spec.split("#")[0]}
-                selected={
-                  selectedCommonName === spec.split("#")[1] ? true : false
-                }
-                value={spec}
-              >
-                {spec.split("#")[1]}
-              </option>
-            ))}
-          </select>
-          <br />
-          <br />
-          <button
-            onClick={() => {
-              setFiltered(false);
-              setSelectedCommonName();
-              setSelectedSpecies();
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <KeplerGl
+            id="map"
+            width={window.innerWidth}
+            mapboxApiAccessToken={process.env.MAPBOX_KEY}
+            height={window.innerHeight - 100}
+          />
+          <div
+            style={{
+              margin: "2em",
+              width: "30%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
             }}
           >
-            Reset
-          </button>
+            <div>
+              <p>Native Status</p>
+              <select style={{ padding: 5 }} onChange={selectNative}>
+                <option
+                  value="none"
+                  selected={!filtered || !nativeStatus ? true : false}
+                  disabled
+                >
+                  Select an Option
+                </option>
+                <option key="native" value="Native">
+                  Native
+                </option>
+                <option key="nonnative" value="Non Native">
+                  Non-Native
+                </option>
+              </select>
+              <p>Conservation Status</p>
+              <select style={{ padding: 5 }} onChange={selectConservation}>
+                <option
+                  value="none"
+                  selected={!filtered || !conservationStatus ? true : false}
+                  disabled
+                >
+                  Select an Option
+                </option>
+                {allConservation.map((cons) => (
+                  <option
+                    key={cons}
+                    value={cons}
+                    selected={conservationStatus === cons ? true : false}
+                  >
+                    {cons}
+                  </option>
+                ))}
+              </select>
+              <p>Common Name</p>
+              <select style={{ padding: 5 }} onChange={selectSpecies}>
+                <option
+                  value="none"
+                  selected={!filtered || !selectedSpecies ? true : false}
+                >
+                  Select an Option
+                </option>
+                {allSpecies.map((spec) => (
+                  <option
+                    key={spec.split("#")[0]}
+                    selected={
+                      selectedCommonName === spec.split("#")[1] ? true : false
+                    }
+                    value={spec}
+                  >
+                    {spec.split("#")[1]}
+                  </option>
+                ))}
+              </select>
+              <br />
+              <br />
+              <button
+                style={{
+                  background: "#006400",
+                  color: "white",
+                  padding: 10,
+                  borderRadius: 5,
+                  border: "none",
+                }}
+                onClick={() => {
+                  setFiltered(false);
+                  setSelectedCommonName();
+                  setSelectedSpecies();
+                  setConservationStatus();
+                  setNativeStatus();
+                }}
+              >
+                Reset
+              </button>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                fontSize: "0.8em",
+                fontStyle: "italics",
+              }}
+            >
+              Built by: Marti McElreath
+              <br />
+              Team members: Richard Latham, Marti McElreath, Raymond Hear,
+              Lakshmi Narayana
+            </div>
+          </div>
         </div>
       </div>
       {selectedSpecies ? (
@@ -311,7 +360,7 @@ function Map() {
       ) : (
         <></>
       )}
-    </div>
+    </>
   );
 }
 
