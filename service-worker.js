@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/hampton-roads-hackathon/precache-manifest.a72638174e6e8cf23c638f1d80bcb5af.js"
+  "/hampton-roads-hackathon/precache-manifest.d42f9bc628e5f92c4b50fb6af835a8dc.js"
 );
 
 self.addEventListener('message', (event) => {
