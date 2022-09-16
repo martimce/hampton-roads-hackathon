@@ -7,7 +7,6 @@ const InfoCard = ({ speciesCode, speciesName, birdData }) => {
 
   useEffect(() => {
     if (birdData && speciesCode) {
-      console.log("here", birdData, speciesCode);
       setSelectedBirdData(birdData[speciesCode]);
     }
   }, [speciesCode, selectedBirdData]);
