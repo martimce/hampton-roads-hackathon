@@ -241,7 +241,7 @@ function Map() {
         <KeplerGl
           id="map"
           width={window.innerWidth}
-          mapboxApiAccessToken="pk.eyJ1IjoibWFydGltYyIsImEiOiJjbDd5MzY5NHowd2IzM3psZXo1aDRpODhjIn0.Qavba6nX0FDvqI5KYjyy5w"
+          mapboxApiAccessToken={process.env.MAPBOX_KEY}
           height={window.innerHeight - 200}
         />
         <div style={{ margin: "2em" }}>
